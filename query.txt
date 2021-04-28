@@ -17,6 +17,18 @@ SELECT `name`,`lastname`,`date_of_birth`
 FROM `ospiti` 
 WHERE `date_of_birth` <= '2001-04-28' 
 ORDER BY `date_of_birth` ASC 
+3.1)
+"svolto con now()":
+SELECT `name`,`lastname`,`date_of_birth` 
+FROM `ospiti` 
+WHERE `date_of_birth` <= (NOW()- INTERVAL 20 YEAR_MONTH) 
+ORDER BY `date_of_birth` ASC;
+3.2)
+"svolto con now()":
+SELECT `name`,`lastname`,`date_of_birth` 
+FROM `ospiti` 
+WHERE (DATEDIFF(NOW(), `date_of_birth`)/365)>=21 
+ORDER BY `date_of_birth` ASC 
 
 4) Seleziona tutti gli ospiti il cui nome inizia con la D
 Risposta 4:
