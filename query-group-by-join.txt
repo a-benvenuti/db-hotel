@@ -37,29 +37,52 @@ ORDER BY `tot_prenotazioni` DESC;
 JOIN
 1) Come si chiamano gli ospiti che hanno fatto più di due prenotazioni?
 Risposta 1:
-SELECT `ospiti`.`name` , COUNT(`prenotazioni_has_ospiti`.`id`) AS 'tot_prenotazioni' 
+SELECT `ospiti`.`lastname` , `ospiti`.`name`, COUNT(`prenotazioni_has_ospiti`.`id`) AS 'tot_prenotazioni' 
 FROM `prenotazioni_has_ospiti`
 INNER JOIN `ospiti`
 ON `prenotazioni_has_ospiti`.`ospite_id` = `ospiti`.`id`
-GROUP BY `ospiti`.`name`
+GROUP BY `ospiti`.`lastname` , `ospiti`.`name`
 HAVING `tot_prenotazioni` > 2
 ORDER BY `tot_prenotazioni` DESC;
 
 2) Stampare tutti gli ospiti per ogni prenotazione
 Risposta 2:
-
+SELECT `ospiti`.`name`, `ospiti`.`lastname`, `prenotazioni_has_ospiti`.`created_at`, `prenotazioni_has_ospiti`.`prenotazione_id`
+FROM `prenotazioni_has_ospiti`
+INNER JOIN `ospiti`
+ON `prenotazioni_has_ospiti`.`ospite_id` = `ospiti`.`id`;
 
 3) Stampare Nome, Cognome, Prezzo e Pagante per tutte le prenotazioni fatte a Maggio 2018
 Risposta 3:
-
+SELECT `paganti`.`name`, `paganti`.`lastname`, `pagamenti`.`price`, `ospiti`.`lastname` AS 'pagante', `prenotazioni`.`created_at`
+FROM `paganti` 
+LEFT JOIN `pagamenti` 
+ON `paganti`.`id` = `pagamenti`.`pagante_id`
+LEFT JOIN `ospiti` 
+ON `paganti`.`ospite_id` = `ospiti`.`id`
+LEFT JOIN `prenotazioni` 
+ON `prenotazioni`.`id` = `pagamenti`.`prenotazione_id`
+HAVING `prenotazioni`.`created_at` LIKE '2018-05%';
 
 4) Fai la somma di tutti i prezzi delle prenotazioni per le stanze del primo piano
 Risposta 4:
-
+SELECT SUM(`pagamenti`.`price`) AS 'tot_prezzi_prenotazioni_1p'
+FROM `stanze` 
+INNER JOIN `prenotazioni` 
+ON `stanze`.`id` = `prenotazioni`.`stanza_id` 
+INNER JOIN `pagamenti` 
+ON `prenotazioni`.`id` = `pagamenti`.`prenotazione_id` 
+WHERE `stanze`.`floor` = 1;
 
 5) Prendi i dati di fatturazione per la prenotazione con id=7
 Risposta 5:
-
+SELECT `paganti`.`name`, `paganti`.`lastname`, `paganti`.`address` 
+FROM `ospiti` 
+INNER JOIN `prenotazioni_has_ospiti` 
+ON `ospiti`.`id` = `prenotazioni_has_ospiti`.`ospite_id` 
+INNER JOIN `paganti` 
+ON `ospiti`.`id` = `paganti`.`ospite_id` 
+WHERE `prenotazioni_has_ospiti`.`prenotazione_id` = 7;
 
 6) Le stanze sono state tutte prenotate almeno una volta? (Visualizzare le stanze non ancora prenotate) 
 Risposta 6:
