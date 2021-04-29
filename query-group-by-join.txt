@@ -1,0 +1,65 @@
+GROUP BY
+1) Conta gli ospiti raggruppandoli per anno di nascita
+Risposta 1:
+SELECT YEAR(`date_of_birth`) AS 'anno_di_nascita', COUNT(`id`) AS 'num_clienti'
+FROM `ospiti` 
+GROUP BY `anno_di_nascita`
+ORDER BY `anno_di_nascita` DESC;
+
+2) Somma i prezzi dei pagamenti raggruppandoli per status
+Risposta 2:
+SELECT `status`, SUM(`price`) AS 'totale'
+FROM `pagamenti` 
+GROUP BY `status`;
+
+3) Conta quante volte è stata prenotata ogni stanza
+Risposta 3:
+SELECT `stanza_id`, COUNT(`id`) AS 'numero_di_prenotazioni'
+FROM `prenotazioni` 
+GROUP BY `stanza_id`
+ORDER BY `numero_di_prenotazioni` DESC;
+
+4) Fai una analisi per vedere se ci sono ore in cui le prenotazioni sono più frequenti
+Risposta 4:
+SELECT DATE_FORMAT(`created_at`, "%H : %i : %s") AS 'orario_prenotazione', COUNT(`id`) AS 'num_prenotazioni'
+FROM `prenotazioni`
+GROUP BY `orario_prenotazione`
+ORDER BY `orario_prenotazione` ASC;
+
+5) Quante prenotazioni ha fatto l’ospite che ha fatto più prenotazioni?
+Risposta 5:
+SELECT `ospite_id`, COUNT(`id`) AS 'tot_prenotazioni' 
+FROM `prenotazioni_has_ospiti` 
+GROUP BY `ospite_id`
+ORDER BY `tot_prenotazioni` DESC;
+
+
+JOIN
+1) Come si chiamano gli ospiti che hanno fatto più di due prenotazioni?
+Risposta 1:
+SELECT `ospiti`.`name` , COUNT(`prenotazioni_has_ospiti`.`id`) AS 'tot_prenotazioni' 
+FROM `prenotazioni_has_ospiti`
+INNER JOIN `ospiti`
+ON `prenotazioni_has_ospiti`.`ospite_id` = `ospiti`.`id`
+GROUP BY `ospiti`.`name`
+HAVING `tot_prenotazioni` > 2
+ORDER BY `tot_prenotazioni` DESC;
+
+2) Stampare tutti gli ospiti per ogni prenotazione
+Risposta 2:
+
+
+3) Stampare Nome, Cognome, Prezzo e Pagante per tutte le prenotazioni fatte a Maggio 2018
+Risposta 3:
+
+
+4) Fai la somma di tutti i prezzi delle prenotazioni per le stanze del primo piano
+Risposta 4:
+
+
+5) Prendi i dati di fatturazione per la prenotazione con id=7
+Risposta 5:
+
+
+6) Le stanze sono state tutte prenotate almeno una volta? (Visualizzare le stanze non ancora prenotate) 
+Risposta 6:
